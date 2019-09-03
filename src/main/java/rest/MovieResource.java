@@ -28,8 +28,21 @@ public class MovieResource {
     private static final MovieFacade FACADE =  MovieFacade.getMovieFacade(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     {
+                    FACADE.addMovie(new Movie("Bad Boys", 2001, new String[]{"Will Smith", "Martin Lawrence"}));
+
         if(FACADE.getMovieCount() == 0){
             FACADE.addMovie(new Movie("Bad Boys", 2001, new String[]{"Will Smith", "Martin Lawrence"}));
+            FACADE.addMovie(new Movie("Chuck n' Lee Dominating the world", 2004, new String[]{"Chuck Norris", "Bruce Lee"}));
+            FACADE.addMovie(new Movie("Straight Outta Compton", 2017, new String[]{
+                "Ice Cube",
+                "Eazy-E",
+                "Suge Knight",
+                "Tupac Shakur",
+                "Snoop Dogg"
+            }));
+            FACADE.addMovie(new Movie("Deadpool", 2016, new String[]{"Ryan Reynolds", "Char izard"}));
+            FACADE.addMovie(new Movie("Ed, Edd n Eddy", 2021, new String[]{"Ed Smalls", "Edd Mediums", "Eddy Biggis"}));
+            FACADE.addMovie(new Movie("Scooby Do", 2001, new String[]{"Scooby Doppy", "Shaggy Flappy"}));
         }
     }        
     @GET
@@ -51,6 +64,13 @@ public class MovieResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getById(@PathParam("id") Long id) {
         return GSON.toJson(FACADE.getMovie(id));
+    }
+    
+    @Path("/all")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getAllMovies() {
+        return GSON.toJson(FACADE.getAllMovies());
     }
     
     @POST
