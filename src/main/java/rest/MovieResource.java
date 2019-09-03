@@ -28,8 +28,6 @@ public class MovieResource {
     private static final MovieFacade FACADE =  MovieFacade.getMovieFacade(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     {
-                    FACADE.addMovie(new Movie("Bad Boys", 2001, new String[]{"Will Smith", "Martin Lawrence"}));
-
         if(FACADE.getMovieCount() == 0){
             FACADE.addMovie(new Movie("Bad Boys", 2001, new String[]{"Will Smith", "Martin Lawrence"}));
             FACADE.addMovie(new Movie("Chuck n' Lee Dominating the world", 2004, new String[]{"Chuck Norris", "Bruce Lee"}));
