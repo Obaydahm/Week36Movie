@@ -64,6 +64,13 @@ public class MovieResource {
         return GSON.toJson(FACADE.getMovie(id));
     }
     
+    @Path("/title/{title}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getById(@PathParam("title") String title) {
+        return GSON.toJson(FACADE.getByTitle(title));
+    }
+    
     @Path("/all")
     @GET
     @Produces({MediaType.APPLICATION_JSON})

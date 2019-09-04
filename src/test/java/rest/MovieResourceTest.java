@@ -1,15 +1,17 @@
 package rest;
 
-//import entities.Movie;
+import entities.Movie;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
 import io.restassured.parsing.Parser;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -18,7 +20,6 @@ import static org.hamcrest.Matchers.equalTo;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import utils.EMF_Creator.DbSelector;
 import utils.EMF_Creator.Strategy;
@@ -35,13 +36,14 @@ public class MovieResourceTest {
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
     private static EntityManagerFactory emf;
+    Movie m = new Movie("Bad Boys", 2001, new String[]{"Will Smith", "Martin Lawrence"});
 
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
         return GrizzlyHttpServerFactory.createHttpServer(BASE_URI, rc);
     }
-    @Ignore
-    //@BeforeAll
+    
+    @BeforeAll
     public static void setUpClass() {
         emf = EMF_Creator.createEntityManagerFactory(DbSelector.TEST, Strategy.CREATE);
 
@@ -57,8 +59,8 @@ public class MovieResourceTest {
    
         RestAssured.defaultParser = Parser.JSON;
     }
-    @Ignore
-    //@AfterAll
+    
+    @AfterAll
     public static void closeTestServer(){
         //System.in.read();
          httpServer.shutdownNow();
@@ -66,47 +68,74 @@ public class MovieResourceTest {
     
     // Setup the DataBase (used by the test-server and this test) in a known state BEFORE EACH TEST
     //TODO -- Make sure to change the script below to use YOUR OWN entity class
-    @Ignore
-    //@BeforeEach
+    @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        /*try {
+        try {
             em.getTransaction().begin();
             em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
-            em.persist(new Movie("Some txt","More text"));
-            em.persist(new Movie("aaa","bbb"));
+            em.persist(m);
+            
            
             em.getTransaction().commit();
         } finally {
             em.close();
-        }*/
+        }
     }
-    @Ignore
-    //@Test
+    
+    @Test
     public void testServerIsUp() {
-        System.out.println("Testing is server UP");
+        System.out.println("1. Testing is server UP");
         given().when().get("/xxx").then().statusCode(200);
     }
-   
-    //This test assumes the database contains two rows
-    @Ignore
-    //@Test
-    public void testDummyMsg() throws Exception {
-        given()
-        .contentType("application/json")
-        .get("/xxx/").then()
-        .assertThat()
-        .statusCode(HttpStatus.OK_200.getStatusCode())
-        .body("msg", equalTo("Hello World"));   
-    }
-    @Ignore
-    //@Test
+
+    @Test
     public void testCount() throws Exception {
+        System.out.println("2. Count test");
         given()
         .contentType("application/json")
         .get("/xxx/count").then()
         .assertThat()
         .statusCode(HttpStatus.OK_200.getStatusCode())
-        .body("count", equalTo(2));   
+        .body("count", equalTo(1));   
+    }
+    
+    @Test
+    public void testGetAll() throws Exception {
+        System.out.println("2. Get all test");
+        List<String> title = new ArrayList<>();
+        title.add(m.getTitle());
+        given()
+        .contentType("application/json")
+        .get("/xxx/all").then()
+        .assertThat()
+        .statusCode(HttpStatus.OK_200.getStatusCode())
+        .body("title", equalTo(title));   
+    }
+    
+    @Test
+    public void testGetByName() throws Exception {
+        System.out.println("3. Get by name test");
+        List<String> title = new ArrayList<>();
+        title.add(m.getTitle());
+        given()
+        .contentType("application/json")
+        .get("/xxx/title/{name}", "Bad Boys").then()
+        .assertThat()
+        .statusCode(HttpStatus.OK_200.getStatusCode())
+        .body("id", equalTo(m.getId().intValue())).body("title", equalTo(m.getTitle()));  
+    }
+    
+    @Test
+    public void testGetById() throws Exception {
+        System.out.println("2. Get by id test");
+        List<String> title = new ArrayList<>();
+        title.add(m.getTitle());
+        given()
+        .contentType("application/json")
+        .get("/xxx/{id}", m.getId()).then()
+        .assertThat()
+        .statusCode(HttpStatus.OK_200.getStatusCode())
+        .body("id", equalTo(m.getId().intValue())).body("title", equalTo(m.getTitle())).body("year", equalTo(m.getYear()));  
     }
 }

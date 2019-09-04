@@ -69,6 +69,17 @@ public class MovieFacade {
         }
     }
     
+    public Movie getByTitle(String title){
+        EntityManager em = emf.createEntityManager();
+        try{
+            TypedQuery<Movie> tq = em.createQuery("SELECT m FROM Movie m WHERE m.title = :title", Movie.class);
+            tq.setParameter("title", title);
+            return tq.getSingleResult();
+        }finally{
+            em.close();
+        }
+    }
+    
     public List<Movie> getAllMovies(){
         EntityManager em = emf.createEntityManager();
         try{
@@ -78,4 +89,6 @@ public class MovieFacade {
             em.close();
         }
     }
+    
+    
 }

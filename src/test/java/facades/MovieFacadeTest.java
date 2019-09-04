@@ -1,7 +1,7 @@
 package facades;
 
 import utils.EMF_Creator;
-//import entities.Movie;
+import entities.Movie;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import jdk.nashorn.internal.ir.annotations.Ignore;
@@ -25,7 +25,7 @@ public class MovieFacadeTest {
     public MovieFacadeTest() {
     }
     
-    @Ignore
+    
     //@BeforeAll
     public static void setUpClass() {
         emf = EMF_Creator.createEntityManagerFactory(
@@ -43,23 +43,23 @@ public class MovieFacadeTest {
         The file config.properties and the corresponding helper class utils.Settings is added just to do that. 
         See below for how to use these files. This is our RECOMENDED strategy
      */
-    @Ignore
-    //@BeforeAll
+    
+    @BeforeAll
     public static void setUpClassV2() {
        emf = EMF_Creator.createEntityManagerFactory(DbSelector.TEST,Strategy.DROP_AND_CREATE);
        facade = MovieFacade.getMovieFacade(emf);
     }
 
-    @Ignore
-    //@AfterAll
+    
+    @AfterAll
     public static void tearDownClass() {
 //        Clean up database after test is done or use a persistence unit with drop-and-create to start up clean on every test
     }
 
     // Setup the DataBase in a known state BEFORE EACH TEST
     //TODO -- Make sure to change the script below to use YOUR OWN entity class
-    @Ignore
-    //@BeforeEach
+    
+    @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
         /*try {
@@ -73,17 +73,17 @@ public class MovieFacadeTest {
             em.close();
         }*/
     }
-    @Ignore
-    //@AfterEach
+    
+    @AfterEach
     public void tearDown() {
 //        Remove any data after each test was run
     }
 
     // TODO: Delete or change this method 
-    @Ignore
-    //@Test
+    
+    /*@Test
     public void testAFacadeMethod() {
         assertEquals(2, facade.getMovieCount(), "Expects two rows in the database");
-    }
+    }*/
 
 }
