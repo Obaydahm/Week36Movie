@@ -23,5 +23,5 @@ This project contains two major documentation files:
 
 ### Wednesday: 
 
-[Link 1](https://github.com/Obaydahm/Week36Movie/blob/master/src/main/webapp/js/wednesday.js)
+[Link 1](https://github.com/Obaydahm/Week36Movie/blob/master/src/main/webapp/js/wednesday.js) <br>
 [Link 2](https://github.com/Obaydahm/Week36Movie/blob/master/src/main/webapp/js/wednesday2.js) - not completed
